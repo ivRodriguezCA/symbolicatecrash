@@ -34,7 +34,9 @@ def check_uuid(app_name):
             return 1
     except OSError as e:
         print >>sys.stderr, "Execution failed:", e
-        return 1
+        sys.exit(2)
+    except:
+        sys.exit(2)
 
 def uuids_from_output(output):
     lines = output.split("\n")
@@ -55,16 +57,20 @@ def find_crash_log(file_name):
 	if file_name == None:
 		return None
 
-	f = open(file_name, 'r+')
-	crashed_line_found = False
-	for line in f:
-		if crashed_line_found:
-			f.close()
-			return line 
-		else:
-			if "Crashed:" in line:
-				crashed_line_found = True
-	f.close()
+	try:
+		f = open(file_name, 'r+')
+		crashed_line_found = False
+		for line in f:
+			if crashed_line_found:
+				f.close()
+				return line 
+			else:
+				if "Crashed:" in line:
+					crashed_line_found = True
+		f.close()
+	except:
+		print >>sys.stderr, "Error Could find app named '" + file_name + "'"
+		sys.exit(2)
 	return None
 
 def crash_addresses(line):
@@ -141,7 +147,7 @@ def main(argv=None):
     	print >>sys.stderr, "Error: Invalid parameters"
     	usage()
         sys.exit(2)
-    else :
+    else:
     	status = check_uuid(app_name)
         if  status == 0:
             crash_log_line = find_crash_log(crash_report)

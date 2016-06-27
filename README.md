@@ -6,6 +6,11 @@ Manually symbolicate iOS crashes
 python symbolicatecrash.py -n <app_name> -c <crash_report> -a <architecture>
 ```
 
+## Assumptions:
+To make the parameters very simple, `symbolicatecrash` only expects the *App Name* and assumes the following:
+- There is a .app package in the same directory with a binary file named exactly the same: **\<app_name>.app/\<app_name>**
+- There is a .dSYM package named **\<app_name>.app.dSYM**
+
 License
 ----
 
